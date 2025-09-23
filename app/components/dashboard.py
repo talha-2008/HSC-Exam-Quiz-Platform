@@ -41,7 +41,7 @@ def performance_chart() -> rx.Component:
                 name="Score (%)",
                 dot={"r": 4, "fill": "#3b82f6"},
             ),
-            data=QuizState.performance_data,
+            data=QuizState.quiz_history_for_chart,
             height=300,
             class_name="font-sans",
         ),
@@ -57,11 +57,11 @@ def dashboard() -> rx.Component:
                 "Total Quizzes", QuizState.total_quizzes_taken, "clipboard-list", "blue"
             ),
             dashboard_card(
-                "Best Score", f"{QuizState.best_score} %", "trophy", "green"
+                "Best Score", QuizState.best_score.to_string() + " %", "trophy", "green"
             ),
             dashboard_card(
                 "Average Score",
-                f"{QuizState.average_percentage} %",
+                QuizState.average_percentage.to_string() + " %",
                 "bar-chart-2",
                 "yellow",
             ),

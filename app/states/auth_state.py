@@ -66,7 +66,9 @@ class AuthState(rx.State):
         user = self.users.get(username)
         if user and user["password_hash"] == password:
             self.logged_in_user = username
-            return rx.redirect("/")
+            from app.states.state import QuizState
+
+            return [rx.redirect("/"), QuizState.go_home]
         else:
             self.error_message = "Invalid username or password."
 

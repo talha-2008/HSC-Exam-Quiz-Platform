@@ -61,6 +61,6 @@ def index() -> rx.Component:
         rx.el.div(
             main_content(), class_name="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
         ),
-        on_mount=QuizState.check_login,
+        on_mount=[QuizState.check_login, QuizState.go_home],
         class_name="font-['Inter'] bg-gray-50 min-h-screen",
     )

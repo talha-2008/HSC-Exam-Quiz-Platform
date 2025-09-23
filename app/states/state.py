@@ -83,6 +83,10 @@ class QuizState(rx.State):
         return [{"date": res["date"], "score": res["percentage"]} for res in history]
 
     @rx.var
+    def quiz_history_for_chart(self) -> list[dict]:
+        return []
+
+    @rx.var
     def result_pie_data(self) -> list[dict]:
         if not self.last_result:
             return []
@@ -135,50 +139,63 @@ class QuizState(rx.State):
                     break
             await asyncio.sleep(1)
 
-    @rx.event(background=True)
-    async def submit_quiz(self):
-        async with self:
-            if not self.quiz_in_progress:
-                return
-            self.timer_active = False
-            self.quiz_in_progress = False
-            score = 0
-            wrong_answers: list[WrongAnswer] = []
-            for i, q in enumerate(self.current_questions):
-                if self.selected_answers.get(i) == q["answer"]:
-                    score += 1
-                else:
-                    wrong_answers.append(
-                        {
-                            "question": q["question"],
-                            "selected": self.selected_answers.get(i, "Not Answered"),
-                            "correct": q["answer"],
-                            "options": q["options"],
-                        }
-                    )
-            total = len(self.current_questions)
-            percentage = round(score / total * 100, 2) if total > 0 else 0
-            self.last_result = {
-                "subject": self.current_subject,
-                "score": score,
-                "total": total,
-                "percentage": percentage,
-                "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
-                "wrong_answers": wrong_answers,
-            }
-            self.quiz_submitted = True
-        async with self:
-            auth_state = await self.get_state(AuthState)
-            async with auth_state:
-                if auth_state.current_user_data:
-                    user_data = auth_state.current_user_data
-                    user_data["quiz_history"].append(self.last_result)
-                    all_users = auth_state.users
-                    all_users[auth_state.logged_in_user] = user_data
-                    auth_state.users_json = json.dumps(all_users)
+    async def _update_dashboard_data(self):
+        auth_state = await self.get_state(AuthState)
+        if not auth_state.is_logged_in:
+            return
+        user_data = auth_state.current_user_data
+        history = user_data.get("quiz_history", [])
+        self.quiz_history_for_chart = [
+            {"date": res["date"], "score": res["percentage"]} for res in history
+        ]
 
-    def go_home(self):
+    @rx.event
+    async def submit_quiz(self):
+        if not self.quiz_in_progress:
+            return
+        self.timer_active = False
+        self.quiz_in_progress = False
+        score = 0
+        wrong_answers: list[WrongAnswer] = []
+        for i, q in enumerate(self.current_questions):
+            if self.selected_answers.get(i) == q["answer"]:
+                score += 1
+            else:
+                wrong_answers.append(
+                    {
+                        "question": q["question"],
+                        "selected": self.selected_answers.get(i, "Not Answered"),
+                        "correct": q["answer"],
+                        "options": q["options"],
+                    }
+                )
+        total = len(self.current_questions)
+        percentage = round(score / total * 100, 2) if total > 0 else 0
+        date_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+        self.last_result = {
+            "subject": self.current_subject,
+            "score": score,
+            "total": total,
+            "percentage": percentage,
+            "date": date_str,
+            "wrong_answers": wrong_answers,
+        }
+        self.quiz_submitted = True
+        auth_state = await self.get_state(AuthState)
+        if auth_state.is_logged_in:
+            user_data = auth_state.current_user_data
+            if user_data:
+                new_history = user_data.get("quiz_history", []) + [self.last_result]
+                user_data["quiz_history"] = new_history
+                all_users = auth_state.users
+                all_users[auth_state.logged_in_user] = user_data
+                auth_state.users_json = json.dumps(all_users)
+        await self._update_dashboard_data()
+
+    @rx.event
+    async def go_home(self):
         self.quiz_in_progress = False
         self.quiz_submitted = False
         self.current_subject = ""
         self.timer_active = False
+        await self._update_dashboard_data()
