@@ -4,7 +4,7 @@ from app.components.dashboard import performance_chart
 
 
 def result_summary_card(
-    title: str, value: rx.Var, icon: str, color: str
+    title: str, value: str | rx.Var, icon: str, color: str
 ) -> rx.Component:
     return rx.el.div(
         rx.icon(icon, class_name=f"h-6 w-6 text-{color}-600"),
@@ -64,23 +64,23 @@ def wrong_answer_card(item: WrongAnswer) -> rx.Component:
 
 def results_page() -> rx.Component:
     return rx.cond(
-        QuizState.last_result,
+        QuizState.has_last_result,
         rx.el.div(
             rx.el.h2("Quiz Result", class_name="text-3xl font-bold text-gray-800 mb-2"),
             rx.el.p(
-                f"Subject: {QuizState.last_result['subject']}",
+                QuizState.last_result_subject,
                 class_name="text-lg text-gray-600 mb-6",
             ),
             rx.el.div(
                 result_summary_card(
                     "Score",
-                    f"{QuizState.last_result['score']}/{QuizState.last_result['total']}",
+                    QuizState.last_result_score_text,
                     "check_check",
                     "green",
                 ),
                 result_summary_card(
                     "Percentage",
-                    f"{QuizState.last_result['percentage']}%",
+                    QuizState.last_result_percentage_text,
                     "percent",
                     "blue",
                 ),
@@ -96,10 +96,10 @@ def results_page() -> rx.Component:
                 class_name="text-2xl font-bold text-gray-800 mb-4",
             ),
             rx.cond(
-                QuizState.last_result["wrong_answers"].length() > 0,
+                QuizState.last_result_wrong_count > 0,
                 rx.el.div(
                     rx.foreach(
-                        QuizState.last_result["wrong_answers"], wrong_answer_card
+                        QuizState.last_result_wrong_answers, wrong_answer_card
                     ),
                     class_name="space-y-4",
                 ),

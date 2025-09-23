@@ -37,11 +37,12 @@ class AuthState(rx.State):
     def _save_users(self, users_data: dict[str, User]):
         self.users_json = json.dumps(users_data)
 
+    @rx.event
     def register(self, form_data: dict):
         self.error_message = ""
         self.success_message = ""
-        username = form_data.get("username")
-        password = form_data.get("password")
+        username = form_data.get("username", "")
+        password = form_data.get("password", "")
         if not username or not password:
             self.error_message = "Username and password are required."
             return
@@ -58,11 +59,12 @@ class AuthState(rx.State):
         self.success_message = "Registration successful! Please log in."
         return rx.redirect("/login")
 
+    @rx.event
     def login(self, form_data: dict):
         self.error_message = ""
         self.success_message = ""
-        username = form_data.get("username")
-        password = form_data.get("password")
+        username = form_data.get("username", "")
+        password = form_data.get("password", "")
         user = self.users.get(username)
         if user and user["password_hash"] == password:
             self.logged_in_user = username
@@ -72,6 +74,7 @@ class AuthState(rx.State):
         else:
             self.error_message = "Invalid username or password."
 
+    @rx.event
     def logout(self):
         self.logged_in_user = ""
         return rx.redirect("/login")

@@ -18,7 +18,7 @@ def question_card() -> rx.Component:
     return rx.el.div(
         rx.el.div(
             rx.el.p(
-                f"Question {QuizState.current_question_index + 1}/{QuizState.current_questions.length()}",
+                QuizState.question_header,
                 class_name="text-sm font-medium text-gray-500",
             ),
             timer_display(),
@@ -33,15 +33,13 @@ def question_card() -> rx.Component:
                 lambda option, index: rx.el.label(
                     rx.el.input(
                         type="radio",
-                        name=f"q{QuizState.current_question_index}",
+                        name=QuizState.current_question_name,
                         value=option,
-                        on_change=lambda: QuizState.select_answer(
+                        # capture `option` in default arg to avoid late-binding issues
+                        on_change=lambda *_ , option=option: QuizState.select_answer(
                             QuizState.current_question_index, option
                         ),
-                        checked=QuizState.selected_answers.get(
-                            QuizState.current_question_index, ""
-                        )
-                        == option,
+                        checked=QuizState.selected_answer_for_current == option,
                         class_name="sr-only peer",
                     ),
                     rx.el.div(
@@ -76,7 +74,7 @@ def quiz_navigation_buttons() -> rx.Component:
             rx.icon("arrow-right", class_name="ml-2"),
             on_click=QuizState.next_question,
             disabled=QuizState.current_question_index
-            == QuizState.current_questions.length() - 1,
+            == QuizState.current_questions_count - 1,
             class_name="flex items-center px-6 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all",
         ),
         class_name="flex justify-between items-center mt-8 w-full max-w-3xl",

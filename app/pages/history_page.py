@@ -4,7 +4,7 @@ from app.states.state import QuizState
 from app.components.dashboard import performance_chart
 
 
-def history_item(result: rx.Var, index: int) -> rx.Component:
+def history_item(result, index: int) -> rx.Component:
     return rx.el.tr(
         rx.el.td(
             result["date"],
@@ -71,7 +71,7 @@ def history_page() -> rx.Component:
                                 )
                             ),
                             rx.el.tbody(
-                                rx.foreach(QuizState.quiz_history, history_item),
+                                rx.foreach(QuizState.quiz_history_list, history_item),
                                 class_name="bg-white divide-y divide-gray-200",
                             ),
                             class_name="min-w-full divide-y divide-gray-200",
