@@ -5,7 +5,6 @@ from datetime import datetime
 from typing import TypedDict
 from app.states.data import questions, Question
 from app.states.auth_state import AuthState
-import json
 
 
 class WrongAnswer(TypedDict):
@@ -40,6 +39,8 @@ class QuizState(rx.State):
 
     @rx.event
     async def check_login(self):
+        # wait briefly to allow client LocalStorage values to synchronize
+        await asyncio.sleep(0.05)
         auth_state = await self.get_state(AuthState)
         if not auth_state.is_logged_in:
             return rx.redirect("/login")
@@ -253,7 +254,8 @@ class QuizState(rx.State):
                 user_data["quiz_history"] = new_history
                 all_users = auth_state.users
                 all_users[auth_state.logged_in_user] = user_data
-                auth_state.users_json = json.dumps(all_users)
+                # persist to server-side users file
+                auth_state._save_users(all_users)
         await self._update_dashboard_data()
 
     @rx.event
