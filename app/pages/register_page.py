@@ -10,31 +10,31 @@ def register_page() -> rx.Component:
             rx.el.div(
                 rx.el.h2(
                     "Register",
-                    class_name="text-3xl font-bold text-gray-800 text-center",
+                    class_name="text-3xl font-bold text-gray-900 text-center",
                 ),
                 rx.el.form(
                     rx.el.div(
                         rx.el.label(
                             "Username",
-                            class_name="block text-sm font-medium text-gray-700",
+                            class_name="block text-sm font-semibold text-gray-900",
                         ),
                         rx.el.input(
                             placeholder="Choose a username",
                             name="username",
-                            class_name="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                            class_name="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
                         ),
                         class_name="mb-4",
                     ),
                     rx.el.div(
                         rx.el.label(
                             "Password",
-                            class_name="block text-sm font-medium text-gray-700",
+                            class_name="block text-sm font-semibold text-gray-900",
                         ),
                         rx.el.input(
                             placeholder="Choose a password",
                             name="password",
                             type="password",
-                            class_name="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                            class_name="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
                         ),
                         class_name="mb-6",
                     ),
@@ -46,22 +46,22 @@ def register_page() -> rx.Component:
                             ),
                             rx.el.p(
                                 AuthState.error_message,
-                                class_name="text-sm text-red-600",
+                                class_name="text-sm text-red-700",
                             ),
-                            class_name="flex items-center p-3 mb-4 bg-red-50 border border-red-200 rounded-lg",
+                            class_name="flex items-center p-3 mb-4 bg-red-50 border border-red-300 rounded-lg",
                         ),
                     ),
                     rx.cond(
                         AuthState.success_message != "",
                         rx.el.div(
                             rx.icon(
-                                "check_check", class_name="h-5 w-5 text-green-500 mr-2"
+                                "check_check", class_name="h-5 w-5 text-green-600 mr-2"
                             ),
                             rx.el.p(
                                 AuthState.success_message,
-                                class_name="text-sm text-green-600",
+                                class_name="text-sm text-green-700",
                             ),
-                            class_name="flex items-center p-3 mb-4 bg-green-50 border border-green-200 rounded-lg",
+                            class_name="flex items-center p-3 mb-4 bg-green-50 border border-green-300 rounded-lg",
                         ),
                     ),
                     rx.el.button(

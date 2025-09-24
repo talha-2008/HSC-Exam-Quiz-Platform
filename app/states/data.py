@@ -1183,7 +1183,7 @@ questions: dict[str, list[Question]] = {
         "$$1+C$$",
         "$$\\\\frac{x^3}{3}+C$$"
       ],
-      "answer": "$$\\frac{x^2}{2}+C$$"
+  "answer": "$$\\\\frac{x^2}{2}+C$$"
     },
     {
       "question": "$$9, 12, 15, ...$$ ধারার সাধারণ অন্তর কত?",
@@ -1203,7 +1203,7 @@ questions: dict[str, list[Question]] = {
         "$$\\\\sqrt{2}d$$",
         "$$2d^2$$"
       ],
-      "answer": "$$\\frac{1}{2}d^2$$"
+  "answer": "$$\\\\frac{1}{2}d^2$$"
     },
     {
       "question": "$$cos 0^{\\circ}$$ এর মান কত?",

@@ -9,31 +9,31 @@ def login_page() -> rx.Component:
         rx.el.div(
             rx.el.div(
                 rx.el.h2(
-                    "Login", class_name="text-3xl font-bold text-gray-800 text-center"
+                    "Login", class_name="text-3xl font-bold text-gray-900 text-center"
                 ),
                 rx.el.form(
                     rx.el.div(
                         rx.el.label(
                             "Username",
-                            class_name="block text-sm font-medium text-gray-700",
+                            class_name="block text-sm font-semibold text-gray-900",
                         ),
                         rx.el.input(
-                            placeholder="Enter your username",
+                            placeholder="Enter your username[Hasan]",
                             name="username",
-                            class_name="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                            class_name="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
                         ),
                         class_name="mb-4",
                     ),
                     rx.el.div(
                         rx.el.label(
                             "Password",
-                            class_name="block text-sm font-medium text-gray-700",
+                            class_name="block text-sm font-semibold text-gray-900",
                         ),
                         rx.el.input(
-                            placeholder="Enter your password",
+                            placeholder="Enter your password[12345]",
                             name="password",
                             type="password",
-                            class_name="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+                            class_name="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
                         ),
                         class_name="mb-6",
                     ),
@@ -45,9 +45,9 @@ def login_page() -> rx.Component:
                             ),
                             rx.el.p(
                                 AuthState.error_message,
-                                class_name="text-sm text-red-600",
+                                class_name="text-sm text-red-700",
                             ),
-                            class_name="flex items-center p-3 mb-4 bg-red-50 border border-red-200 rounded-lg",
+                            class_name="flex items-center p-3 mb-4 bg-red-50 border border-red-300 rounded-lg",
                         ),
                     ),
                     rx.el.button(
